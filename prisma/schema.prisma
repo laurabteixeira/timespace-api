@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  githubId  Int      @unique
+  name      String
+  login     String
+  avatarUrl String
+  memories  Memory[]
+  // O '@id' mostra para o prisma que este campo será a primary key (chave primaria) da tabela. (Para que depois eu consiga buscar usuários pelo id.)
+  // O "@default(uuid())" faz com que um id aleatória seja gerado para cada usuário cadastrado.
+  // Login: nome de usuário do Github (vai ser salvo quando a pessoa fizer login).
+}
+
+model Memory {
+  id        String   @id @default(uuid())
+  userId    String
+  coverUrl  String
+  content   String
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  // 'coverUrl': endereço da imagem ou vídeo de fundo.
+
+  user User @relation(fields: [userId], references: [id])
+}
