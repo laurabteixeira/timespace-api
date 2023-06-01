@@ -1,6 +1,10 @@
+import 'dotenv/config'
+
 import fastify from 'fastify'
-import { memoriesRoutes } from './routes/memories'
 import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
+import { memoriesRoutes } from './routes/memories'
+import { authRoutes } from './routes/auth'
 
 const app = fastify()
 
@@ -8,7 +12,12 @@ app.register(cors, {
   origin: true, // todas as ULRs de frontend poderão acessar o backend.
 })
 
+app.register(jwt, {
+  secret: 'fsfji43cujr93jfcrewi0u8',
+})
+
 // app.register((app) => memoriesRoutes(app))
+app.register(authRoutes)
 app.register(memoriesRoutes)
 
 // 'register()' é um método do Fastify que, nesse caso, retorna o array de usuários (ou array vazio, caso não haja nenhum).
