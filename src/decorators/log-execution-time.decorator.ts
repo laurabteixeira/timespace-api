@@ -9,9 +9,7 @@ export function LogExecutionTime(
   descriptor.value = async function (...args: any[]) {
     try {
       // const output = await method(args)
-
       const start = Date.now()
-
       output = await method.apply(this, args)
       const end = Date.now()
 

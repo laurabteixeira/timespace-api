@@ -12,7 +12,6 @@ export function LogDecorator(
   descriptor.value = async function (...args: any[]) {
     try {
       // const output = await method(args)
-
       output = await method.apply(this, args)
       await prisma.log.create({
         data: {

@@ -14,10 +14,12 @@ model User {
   login     String
   avatarUrl String?
   memories  Memory[]
-  // O '@id' mostra para o prisma que este campo será a primary key (chave primaria) da tabela. (Para que depois eu consiga buscar usuários pelo id.)
-  // O "@default(uuid())" faz com que um id aleatória seja gerado para cada usuário cadastrado.
-  // Login: nome de usuário do Github (vai ser salvo quando a pessoa fizer login).
 }
+
+// PS:
+// O '@id' mostra para o prisma que este campo será a primary key (chave primaria) da tabela. (Para que depois eu consiga buscar usuários pelo id.)
+// O "@default(uuid())" faz com que um id aleatória seja gerado para cada usuário cadastrado.
+// Login: nome de usuário do Github (vai ser salvo quando a pessoa fizer login).
 
 model Memory {
   id        String   @id @default(uuid())
@@ -26,10 +28,13 @@ model Memory {
   content   String
   isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
-  // 'coverUrl': endereço da imagem ou vídeo de fundo.
+  user      User     @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  @@unique([id, userId])
 }
+
+// 'coverUrl': endereço da imagem ou vídeo de fundo.
+// O @@unique transfoma as variáveis 'id' e 'userId' como ÚNICAS quando são usadas juntas. (Porque não dá para um usuário ter mais de uma memória com o mesmo ID).
 
 model Log {
   id       String @id @default(uuid())
