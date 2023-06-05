@@ -11,13 +11,15 @@ export class MemoryController {
     const memories = await prisma.memory.findMany({
       where: {
         userId: request.user.sub,
-        // O where serve para que apenas as memórias DESTE usuário sejam listadas.
-        // Foi declarado no 'auth.ts' que o 'sub' tem a informação 'userId'. E foi declarado no 'auth.d.ts' que o 'user' tem a informação 'sub'.
       },
       orderBy: {
         createdAt: 'asc',
       },
     })
+    // PS:
+    // O where serve para que apenas as memórias DESTE usuário sejam listadas.
+    // Foi declarado no 'auth.ts' que o 'sub' tem a informação 'userId'. E foi declarado no 'auth.d.ts' que o 'user' tem a informação 'sub'.
+
     return memories.map((memory) => {
       return {
         id: memory.id,
@@ -55,9 +57,11 @@ export class MemoryController {
         content: z.string(),
         coverUrl: z.string(),
         isPublic: z.coerce.boolean().default(false),
-        // A variável boolean não vai necessariamente chegar como 'true' ou 'false' para o 'isPublic'. Ela pode vir como: 0, null, undefined (para false) ou 1, uma string (para true).
-        // O coerce é usado para pegar essa resposta e convertê-la para 'true' ou 'false', para o código entender.
       })
+      // PS:
+      // A variável boolean não vai necessariamente chegar como 'true' ou 'false' para o 'isPublic'. Ela pode vir como: 0, null, undefined (para false) ou 1, uma string (para true).
+      // O coerce é usado para pegar essa resposta e convertê-la para 'true' ou 'false', para o código entender.
+
       const { content, coverUrl, isPublic } = bodySchema.parse(request.body)
       const memory = await prisma.memory.create({
         data: {
